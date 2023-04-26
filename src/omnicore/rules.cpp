@@ -49,10 +49,10 @@ std::vector<TransactionRestriction> CConsensusParams::GetRestrictions() const
         { MSC_TYPE_CREATE_PROPERTY_FIXED,     MP_TX_PKT_V0,  false,   MSC_SP_BLOCK              },
         { MSC_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V0,  false,   MSC_SP_BLOCK              },
         { MSC_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V1,  false,   MSC_SP_BLOCK              },
-        { MSC_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V2,  false,   MSC_BTC_CROWDSALE_BLOCK   },
+        { MSC_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V2,  false,   MSC_XEP_CROWDSALE_BLOCK   },
         { MSC_TYPE_CLOSE_CROWDSALE,           MP_TX_PKT_V0,  false,   MSC_SP_BLOCK              },
 
-        { MSC_TYPE_BITCOIN_PAYMENT,           MP_TX_PKT_V0,   true,   MSC_BTC_CROWDSALE_BLOCK   },
+        { MSC_TYPE_XEP_PAYMENT,           MP_TX_PKT_V0,   true,   MSC_XEP_CROWDSALE_BLOCK   },
 
         { MSC_TYPE_CREATE_PROPERTY_MANUAL,    MP_TX_PKT_V0,  false,   MSC_MANUALSP_BLOCK        },
         { MSC_TYPE_GRANT_PROPERTY_TOKENS,     MP_TX_PKT_V0,  false,   MSC_MANUALSP_BLOCK        },
@@ -171,7 +171,7 @@ CMainConsensusParams::CMainConsensusParams()
     MSC_SEND_ALL_BLOCK = GENESIS_BLOCK;
     MSC_BET_BLOCK = std::numeric_limits<int>::max();
     MSC_STOV1_BLOCK = std::numeric_limits<int>::max();
-    MSC_BTC_CROWDSALE_BLOCK = GENESIS_BLOCK;
+    MSC_XEP_CROWDSALE_BLOCK = GENESIS_BLOCK;
     MSC_ANYDATA_BLOCK = GENESIS_BLOCK;
     MSC_NONFUNGIBLE_BLOCK = GENESIS_BLOCK;
     MSC_DELEGATED_ISSUANCE_BLOCK = GENESIS_BLOCK;
@@ -217,7 +217,7 @@ CTestNetConsensusParams::CTestNetConsensusParams()
     MSC_SEND_ALL_BLOCK = 0;
     MSC_BET_BLOCK = 999999;
     MSC_STOV1_BLOCK = 0;
-    MSC_BTC_CROWDSALE_BLOCK = 0;
+    MSC_XEP_CROWDSALE_BLOCK = 0;
     MSC_ANYDATA_BLOCK = 0;
     MSC_NONFUNGIBLE_BLOCK = 0;
     MSC_DELEGATED_ISSUANCE_BLOCK = 0;
@@ -263,7 +263,7 @@ CRegTestConsensusParams::CRegTestConsensusParams()
     MSC_SEND_ALL_BLOCK = 0;
     MSC_BET_BLOCK = 999999;
     MSC_STOV1_BLOCK = 999999;
-    MSC_BTC_CROWDSALE_BLOCK = 999999;
+    MSC_XEP_CROWDSALE_BLOCK = 999999;
     MSC_ANYDATA_BLOCK = 0;
     MSC_NONFUNGIBLE_BLOCK = 0;
     MSC_DELEGATED_ISSUANCE_BLOCK = 0;
@@ -379,7 +379,7 @@ bool IsAllowedOutputType(int whichType, int nBlock)
 /**
  * Whether Bitcoin payments are supported for a transaction type/version.
  */
-bool IsBitcoinPaymentAllowed(uint16_t type, uint16_t version)
+bool IsXepPaymentAllowed(uint16_t type, uint16_t version)
 {
     bool allowed = false;
 
@@ -573,7 +573,7 @@ std::string GetFeatureName(uint16_t featureId)
         case FEATURE_TRADEALLPAIRS: return "Allow trading all pairs on the Distributed Exchange";
         case FEATURE_FEES: return "Fee system (inc 0.05% fee from trades of non-Omni pairs)";
         case FEATURE_STOV1: return "Cross-property Send To Owners";
-        case FEATURE_BTC_CROWDSALES: return "Allow BTC as the desired property in a crowdsale)";
+        case FEATURE_XEP_CROWDSALES: return "Allow BTC as the desired property in a crowdsale)";
         case FEATURE_FREEZENOTICE: return "Activate the waiting period for enabling freezing";
         case FEATURE_FREEDEX: return "Activate trading of any token on the distributed exchange";
         case FEATURE_NONFUNGIBLE: return "Uniquely identifiable tokens";
@@ -622,7 +622,7 @@ bool IsFeatureActivated(uint16_t featureId, int transactionBlock)
         case FEATURE_STOV1:
             activationBlock = params.MSC_STOV1_BLOCK;
             break;
-        case FEATURE_BTC_CROWDSALES:
+        case FEATURE_XEP_CROWDSALES:
             activationBlock = params.FEES_FEATURE_BLOCK;
             break;
         case FEATURE_FREEZENOTICE:
@@ -664,7 +664,7 @@ bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType,
             continue;
         }
         // a property identifier of 0 (= BTC) may be used as wildcard
-        if (OMNI_PROPERTY_BTC == txProperty && !entry.allowWildcard) {
+        if (OMNI_PROPERTY_XEP == txProperty && !entry.allowWildcard) {
             continue;
         }
         // transactions are not restricted in the test ecosystem

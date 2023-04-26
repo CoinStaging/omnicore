@@ -63,7 +63,7 @@ std::vector<unsigned char> CreatePayload_SimpleSend(uint32_t propertyId, uint64_
     return payload;
 }
 
-std::vector<unsigned char> CreatePayload_BitcoinPayment(const uint256& linkedtxid)
+std::vector<unsigned char> CreatePayload_XepPayment(const uint256& linkedtxid)
 {
     std::vector<unsigned char> payload;
     uint16_t messageVer = 0;
@@ -250,7 +250,7 @@ std::vector<unsigned char> CreatePayload_IssuanceVariable(uint8_t ecosystem, uin
 {
     std::vector<unsigned char> payload;
     uint16_t messageType = 51;
-    uint16_t messageVer = (propertyIdDesired == BTC_PROPERTY_ID) ? 2 : 0;
+    uint16_t messageVer = (propertyIdDesired == XEP_PROPERTY_ID) ? 2 : 0;
     SwapByteOrder16(messageVer);
     SwapByteOrder16(messageType);
     SwapByteOrder16(propertyType);

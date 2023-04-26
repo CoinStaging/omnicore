@@ -36,7 +36,7 @@ void populateRPCTypeRevoke(CMPTransaction& omniOobj, UniValue& txobj);
 void populateRPCTypeSendNonFungible(CMPTransaction& omniObj, UniValue& txobj);
 void populateRPCTypeSetNonFungibleData(CMPTransaction& omniObj, UniValue& txobj);
 void populateRPCTypeChangeIssuer(CMPTransaction& omniObj, UniValue& txobj);
-void populateRPCTypeBitcoinPayment(CMPTransaction& omniObj, UniValue& txobj);
+void populateRPCTypeXepPayment(CMPTransaction& omniObj, UniValue& txobj);
 void populateRPCTypeActivation(CMPTransaction& omniObj, UniValue& txobj);
 void populateRPCTypeEnableFreezing(CMPTransaction& omniObj, UniValue& txobj);
 void populateRPCTypeDisableFreezing(CMPTransaction& omniObj, UniValue& txobj);

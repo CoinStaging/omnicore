@@ -129,7 +129,7 @@ private:
     bool interpret_GrantTokens();
     bool interpret_RevokeTokens();
     bool interpret_ChangeIssuer();
-    bool interpret_BitcoinPayment();
+    bool interpret_XepPayment();
     bool interpret_EnableFreezing();
     bool interpret_DisableFreezing();
     bool interpret_FreezeTokens();
@@ -162,7 +162,7 @@ private:
     int logicMath_GrantTokens(CBlockIndex* pindex, uint256 &blockHash);
     int logicMath_RevokeTokens(CBlockIndex *pindex);
     int logicMath_ChangeIssuer(CBlockIndex *pindex);
-    int logicMath_BitcoinPayment();
+    int logicMath_XepPayment();
     int logicMath_EnableFreezing(CBlockIndex *pindex);
     int logicMath_DisableFreezing(CBlockIndex *pindex);
     int logicMath_FreezeTokens(CBlockIndex *pindex);

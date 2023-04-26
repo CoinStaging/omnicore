@@ -94,7 +94,7 @@ public:
                 offer_amount_original,
                 property,
                 BTC_desired_original,
-                (OMNI_PROPERTY_BTC),
+                (OMNI_PROPERTY_XEP),
                 min_fee,
                 blocktimelimit,
                 txid.ToString()

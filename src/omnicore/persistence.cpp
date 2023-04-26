@@ -258,7 +258,7 @@ static int input_mp_offers_string(const std::string& s)
     uint256 txid = uint256S(vstr[i++]);
 
     // TODO: should this be here? There are usually no sanity checks..
-    if (OMNI_PROPERTY_BTC != prop_desired) return -1;
+    if (OMNI_PROPERTY_XEP != prop_desired) return -1;
 
     const std::string combo = STR_SELLOFFER_ADDR_PROP_COMBO(sellerAddr, prop);
     CMPOffer newOffer(offerBlock, amountOriginal, prop, btcDesired, minFee, blocktimelimit, txid);

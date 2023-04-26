@@ -308,7 +308,7 @@ static UniValue omni_createpayload_issuancecrowdsale(const JSONRPCRequest& reque
 
     //Line commented out because it prevents omni_getactivecrowdsales from populating and active crowdsales
     //RequirePropertyName(name);
-    if (propertyIdDesired != BTC_PROPERTY_ID) {
+    if (propertyIdDesired != XEP_PROPERTY_ID) {
         RequireExistingProperty(propertyIdDesired);
         RequireSameEcosystem(ecosystem, propertyIdDesired);
     }

@@ -232,8 +232,8 @@ void populateRPCTypeInfo(CMPTransaction& mp_obj, UniValue& txobj, uint32_t txTyp
         case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
             populateRPCTypeChangeIssuer(mp_obj, txobj);
             break;
-        case MSC_TYPE_BITCOIN_PAYMENT:
-            populateRPCTypeBitcoinPayment(mp_obj, txobj);
+        case MSC_TYPE_XEP_PAYMENT:
+            populateRPCTypeXepPayment(mp_obj, txobj);
             break;
         case MSC_TYPE_ENABLE_FREEZING:
             populateRPCTypeEnableFreezing(mp_obj, txobj);
@@ -289,7 +289,7 @@ bool showRefForTx(uint32_t txType)
         case MSC_TYPE_REVOKE_PROPERTY_TOKENS: return false;
         case MSC_TYPE_CHANGE_ISSUER_ADDRESS: return true;
         case MSC_TYPE_SEND_ALL: return true;
-        case MSC_TYPE_BITCOIN_PAYMENT: return false;
+        case MSC_TYPE_XEP_PAYMENT: return false;
         case MSC_TYPE_ENABLE_FREEZING: return false;
         case MSC_TYPE_DISABLE_FREEZING: return false;
         case MSC_TYPE_FREEZE_PROPERTY_TOKENS: return true;
@@ -642,7 +642,7 @@ void populateRPCTypeAnyData(CMPTransaction& omniObj, UniValue& txobj)
     txobj.pushKV("data", omniObj.getPayloadData());
 }
 
-void populateRPCTypeBitcoinPayment(CMPTransaction& omniObj, UniValue& txobj)
+void populateRPCTypeXepPayment(CMPTransaction& omniObj, UniValue& txobj)
 {
     uint256 linked_txid = omniObj.getLinkedTXID();
     txobj.pushKV("linkedtxid", linked_txid.GetHex());
@@ -666,7 +666,7 @@ void populateRPCTypeBitcoinPayment(CMPTransaction& omniObj, UniValue& txobj)
                 if (mp_obj.interpret_Transaction()) {
                     txobj.pushKV("linkedtxtype", mp_obj.getTypeString());
                     txobj.pushKV("paymentrecipient", mp_obj.getSender());
-                    txobj.pushKV("paymentamount", FormatDivisibleMP(GetBitcoinPaymentAmount(omniObj.getHash(), mp_obj.getSender())));
+                    txobj.pushKV("paymentamount", FormatDivisibleMP(GetXepPaymentAmount(omniObj.getHash(), mp_obj.getSender())));
                 }
             }
         }

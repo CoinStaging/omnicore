@@ -160,11 +160,11 @@ std::string mastercore::strMPProperty(uint32_t propertyId)
         str = strprintf("Test token: %d : 0x%08X", 0x7FFFFFFF & propertyId, propertyId);
     } else {
         switch (propertyId) {
-            case OMNI_PROPERTY_BTC: str = "BTC";
+            case OMNI_PROPERTY_XEP: str = "XEP";
                 break;
-            case OMNI_PROPERTY_MSC: str = "OMN";
+            case OMNI_PROPERTY_MSC: str = "wXEP";
                 break;
-            case OMNI_PROPERTY_TMSC: str = "TOMN";
+            case OMNI_PROPERTY_TMSC: str = "xTXEP";
                 break;
             default:
                 str = strprintf("SP token: %d", propertyId);
@@ -313,7 +313,7 @@ bool mastercore::isTestEcosystemProperty(uint32_t propertyId)
 
 bool mastercore::isMainEcosystemProperty(uint32_t propertyId)
 {
-    if ((OMNI_PROPERTY_BTC != propertyId) && !isTestEcosystemProperty(propertyId)) return true;
+    if ((OMNI_PROPERTY_XEP != propertyId) && !isTestEcosystemProperty(propertyId)) return true;
 
     return false;
 }
@@ -410,9 +410,9 @@ std::string mastercore::getTokenLabel(uint32_t propertyId)
     std::string tokenStr;
     if (propertyId < 3) {
         if (propertyId == 1) {
-            tokenStr = " OMNI";
+            tokenStr = " wXEP";
         } else {
-            tokenStr = " TOMNI";
+            tokenStr = " wTXEP";
         }
     } else {
         tokenStr = strprintf(" SPT#%d", propertyId);
@@ -561,7 +561,7 @@ static int64_t calculate_and_update_devmsc(unsigned int nTime, int block)
 
     // sanity check that devmsc isn't an impossible value
     if (devmsc > all_reward || 0 > devmsc) {
-        PrintToLog("%s(): ERROR: insane number of Dev OMNI (nTime=%d, exodus_prev=%d, devmsc=%d)\n", __func__, nTime, exodus_prev, devmsc);
+        PrintToLog("%s(): ERROR: insane number of Dev XEP (nTime=%d, exodus_prev=%d, devmsc=%d)\n", __func__, nTime, exodus_prev, devmsc);
         return 0;
     }
 
@@ -1146,7 +1146,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
         } else {
             if ((!bRPConly || msc_debug_parser_readonly) && msc_debug_parser_dex) {
                 PrintToLog("!! sender: %s , receiver: %s\n", strSender, strReference);
-                PrintToLog("!! this may be the BTC payment for an offer !!\n");
+                PrintToLog("!! this may be the XEP payment for an offer !!\n");
             }
         }
     }
@@ -1362,7 +1362,7 @@ int ParseTransaction(const CTransaction& tx, int nBlock, unsigned int idx, CMPTr
 /**
  * Helper to provide the amount of BTC sent to a particular address in a transaction
  */
-int64_t GetBitcoinPaymentAmount(const uint256& txid, const std::string& recipient)
+int64_t GetXepPaymentAmount(const uint256& txid, const std::string& recipient)
 {
 
     /* Original code from the PR
@@ -1719,9 +1719,9 @@ int mastercore_init()
             return 0;
         }
 
-        PrintToConsole("Initializing Omni Core v%s [%s]\n", OmniCoreVersion(), Params().NetworkIDString());
+        PrintToConsole("Initializing OmniXEP Core v%s [%s]\n", OmniCoreVersion(), Params().NetworkIDString());
 
-        PrintToLog("\nInitializing Omni Core v%s [%s]\n", OmniCoreVersion(), Params().NetworkIDString());
+        PrintToLog("\nInitializing OmniXEP Core v%s [%s]\n", OmniCoreVersion(), Params().NetworkIDString());
         PrintToLog("Startup time: %s\n", FormatISO8601DateTime(GetTime()));
 
         InitDebugLogLevels();
@@ -1942,10 +1942,10 @@ int mastercore_shutdown()
 
     mastercoreInitialized = 0;
 
-    PrintToLog("\nOmni Core shutdown completed\n");
+    PrintToLog("\nOmniXEP Core shutdown completed\n");
     PrintToLog("Shutdown time: %s\n", FormatISO8601DateTime(GetTime()));
 
-    PrintToConsole("Omni Core shutdown completed\n");
+    PrintToConsole("OmniXEP Core shutdown completed\n");
 
     return 0;
 }

@@ -85,7 +85,7 @@ printf "\nTesting sending a BTC payment to the crowdsale...\n"
 printf "   * Sending some BTC to %s\n" ${ADDRESS[1]}
 ./src/omnicore-cli --regtest sendtoaddress ${ADDRESS[1]} 0.2 >null
 printf "   * Sending some BTC from %s to the crowdsale\n" ${ADDRESS[1]}
-TXID=$(./src/omnicore-cli --regtest omni_sendbtcpayment ${ADDRESS[1]} $ADDR $CROWDTXID 0.1)
+TXID=$(./src/omnicore-cli --regtest omni_sendxeppayment ${ADDRESS[1]} $ADDR $CROWDTXID 0.1)
 ./src/omnicore-cli --regtest setgenerate true 1 >null
 printf "     # Checking the transaction was valid... "
 RESULT=$(./src/omnicore-cli --regtest omni_gettransaction $TXID | grep valid | cut -c15-)
@@ -197,7 +197,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending some BTC from %s to the crowdsale\n" ${ADDRESS[4]}
-TXID=$(./src/omnicore-cli --regtest omni_sendbtcpayment ${ADDRESS[4]} ${ADDRESS[3]} $CROWDTXID 0.1)
+TXID=$(./src/omnicore-cli --regtest omni_sendxeppayment ${ADDRESS[4]} ${ADDRESS[3]} $CROWDTXID 0.1)
 ./src/omnicore-cli --regtest setgenerate true 1 >null
 printf "     # Checking the transaction was valid... "
 RESULT=$(./src/omnicore-cli --regtest omni_gettransaction $TXID | grep valid | cut -c15-)

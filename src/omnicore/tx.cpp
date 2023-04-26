@@ -81,7 +81,7 @@ std::string mastercore::strTransactionType(uint16_t txType)
         case MSC_TYPE_ANYDATA: return "Embed any data";
         case MSC_TYPE_NONFUNGIBLE_DATA: return "Set Non-Fungible Token Data";
         case MSC_TYPE_NOTIFICATION: return "Notification";
-        case MSC_TYPE_BITCOIN_PAYMENT: return "Bitcoin Payment";
+        case MSC_TYPE_XEP_PAYMENT: return "Bitcoin Payment";
         case OMNICORE_MESSAGE_TYPE_ALERT: return "ALERT";
         case OMNICORE_MESSAGE_TYPE_DEACTIVATION: return "Feature Deactivation";
         case OMNICORE_MESSAGE_TYPE_ACTIVATION: return "Feature Activation";
@@ -174,8 +174,8 @@ bool CMPTransaction::interpret_Transaction()
         case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
             return interpret_ChangeIssuer();
 
-        case MSC_TYPE_BITCOIN_PAYMENT:
-            return interpret_BitcoinPayment();
+        case MSC_TYPE_XEP_PAYMENT:
+            return interpret_XepPayment();
 
         case MSC_TYPE_ENABLE_FREEZING:
             return interpret_EnableFreezing();
@@ -761,7 +761,7 @@ bool CMPTransaction::interpret_DisableFreezing()
 }
 
 /** Tx 80 */
-bool CMPTransaction::interpret_BitcoinPayment()
+bool CMPTransaction::interpret_XepPayment()
 {
     if (pkt_size < 36) {
         return false;
@@ -1086,8 +1086,8 @@ int CMPTransaction::interpretPacket()
         case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
             return logicMath_ChangeIssuer(pindex);
 
-        case MSC_TYPE_BITCOIN_PAYMENT:
-            return logicMath_BitcoinPayment();
+        case MSC_TYPE_XEP_PAYMENT:
+            return logicMath_XepPayment();
 
         case MSC_TYPE_ENABLE_FREEZING:
             return logicMath_EnableFreezing(pindex);
@@ -2522,7 +2522,7 @@ int CMPTransaction::logicMath_DisableFreezing(CBlockIndex* pindex)
 }
 
 /** Tx 80 */
-int CMPTransaction::logicMath_BitcoinPayment()
+int CMPTransaction::logicMath_XepPayment()
 {
     uint256 blockHash;
     {
@@ -2603,7 +2603,7 @@ int CMPTransaction::logicMath_BitcoinPayment()
 
     uint16_t linked_type = mp_obj.getType();
     uint16_t linked_version = mp_obj.getVersion();
-    if (!IsBitcoinPaymentAllowed(linked_type, linked_version)) {
+    if (!IsXepPaymentAllowed(linked_type, linked_version)) {
         PrintToLog("%s(): rejected: linked transaction %s doesn't support bitcoin payments\n",
             __func__,
             linked_txid.GetHex());
@@ -2611,7 +2611,7 @@ int CMPTransaction::logicMath_BitcoinPayment()
     }
 
     std::string linked_sender = mp_obj.getSender();
-    nValue = GetBitcoinPaymentAmount(txid, linked_sender);
+    nValue = GetXepPaymentAmount(txid, linked_sender);
     PrintToLog("\tlinked tx sender: %s\n", linked_sender);
     PrintToLog("\t  payment amount: %s\n", FormatDivisibleMP(nValue));
 

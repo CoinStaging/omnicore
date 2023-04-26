@@ -234,14 +234,14 @@ static UniValue omni_send(const JSONRPCRequest& request)
     }
 }
 
-// omni_sendbtcpayment - send a BTC payment
-static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
+// omni_sendxeppayment - send a BTC payment
+static UniValue omni_sendxeppayment(const JSONRPCRequest& request)
 {
 
     std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
     std::unique_ptr<interfaces::Wallet> pwallet = interfaces::MakeWallet(wallet);
 
-    RPCHelpMan{"omni_sendbtcpayment",
+    RPCHelpMan{"omni_sendxeppayment",
        "\nCreate and broadcast a BTC payment transaction.\n",
        {
            {"fromaddress", RPCArg::Type::STR, RPCArg::Optional::NO, "the address to send from\n"},
@@ -253,8 +253,8 @@ static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
            RPCResult::Type::STR_HEX, "hash", "the hex-encoded transaction hash"
        },
        RPCExamples{
-           HelpExampleCli("omni_sendbtcpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"txid\" \"0.01\"") 
-           + HelpExampleRpc("omni_sendbtcpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"txid\", \"0.01\"")
+           HelpExampleCli("omni_sendxeppayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"txid\" \"0.01\"") 
+           + HelpExampleRpc("omni_sendxeppayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"txid\", \"0.01\"")
            
        }
     }.Check(request);
@@ -266,7 +266,7 @@ static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
     int64_t referenceAmount = ParseAmount(request.params[3], true);
 
     // create a payload for the transaction
-    std::vector<unsigned char> payload = CreatePayload_BitcoinPayment(linkedtxid);
+    std::vector<unsigned char> payload = CreatePayload_XepPayment(linkedtxid);
 
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;
@@ -281,7 +281,7 @@ static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_BITCOIN_PAYMENT, BTC_PROPERTY_ID, referenceAmount);
+            PendingAdd(txid, fromAddress, MSC_TYPE_XEP_PAYMENT, XEP_PROPERTY_ID, referenceAmount);
             return txid.GetHex();
         }
     }
@@ -956,7 +956,7 @@ static UniValue omni_sendissuancecrowdsale(const JSONRPCRequest& request)
 
     // perform checks
     RequirePropertyName(name);
-    if (propertyIdDesired != BTC_PROPERTY_ID) {
+    if (propertyIdDesired != XEP_PROPERTY_ID) {
         RequireExistingProperty(propertyIdDesired);
         RequireSameEcosystem(ecosystem, propertyIdDesired);
     }
@@ -2177,7 +2177,7 @@ static const CRPCCommand commands[] =
   //  ------------------------------------ ------------------------------- ------------------------------ ----------
     { "omni layer (transaction creation)", "omni_sendrawtx",               &omni_sendrawtx,               {"fromaddress", "rawtransaction", "referenceaddress", "redeemaddress", "referenceamount"} },
     { "omni layer (transaction creation)", "omni_send",                    &omni_send,                    {"fromaddress", "toaddress", "propertyid", "amount", "redeemaddress", "referenceamount"} },
-    { "omni layer (transaction creation)", "omni_sendbtcpayment",          &omni_sendbtcpayment,          {"fromaddress", "toaddress", "linkedTxID", "amount"} },
+    { "omni layer (transaction creation)", "omni_sendxeppayment",          &omni_sendxeppayment,          {"fromaddress", "toaddress", "linkedTxID", "amount"} },
     { "omni layer (transaction creation)", "omni_senddexsell",             &omni_senddexsell,             {"fromaddress", "propertyidforsale", "amountforsale", "amountdesired", "paymentwindow", "minacceptfee", "action"} },
     { "omni layer (transaction creation)", "omni_sendnewdexorder",         &omni_sendnewdexorder,         {"fromaddress", "propertyidforsale", "amountforsale", "amountdesired", "paymentwindow", "minacceptfee"} },
     { "omni layer (transaction creation)", "omni_sendupdatedexorder",      &omni_sendupdatedexorder,      {"fromaddress", "propertyidforsale", "amountforsale", "amountdesired", "paymentwindow", "minacceptfee"} },

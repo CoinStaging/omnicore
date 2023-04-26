@@ -8,7 +8,7 @@
 #include <uint256.h>
 
 std::vector<unsigned char> CreatePayload_SimpleSend(uint32_t propertyId, uint64_t amount);
-std::vector<unsigned char> CreatePayload_BitcoinPayment(const uint256& linkedtxid);
+std::vector<unsigned char> CreatePayload_XepPayment(const uint256& linkedtxid);
 std::vector<unsigned char> CreatePayload_SendAll(uint8_t ecosystem);
 std::vector<unsigned char> CreatePayload_SendNonFungible(uint32_t propertyId, uint64_t tokenStart, uint64_t tokenEnd);
 std::vector<unsigned char> CreatePayload_SetNonFungibleData(uint32_t propertyId, uint64_t tokenStart, uint64_t tokenEnd, uint8_t issuer, std::string& data);
